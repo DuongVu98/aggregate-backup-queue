@@ -1,6 +1,7 @@
 package com.epam.aggregatebackupqueue.executor;
 
 import com.epam.aggregatebackupqueue.aggregate.Order;
+import com.epam.aggregatebackupqueue.aggregate.ValueObjectId;
 import com.epam.aggregatebackupqueue.annotations.AggregateBackup;
 import com.epam.aggregatebackupqueue.commands.DeleteOrderCommand;
 import com.epam.aggregatebackupqueue.exceptions.OrderNotFoundException;
@@ -22,7 +23,7 @@ public class DeleteOrderCommandExecutor extends AbstractCommandExecutor<DeleteOr
 
     @Override
     public Order execute(DeleteOrderCommand deleteOrderCommand) throws OrderNotFoundException {
-        Optional<Order> orderOptional = orderRepository.findById(deleteOrderCommand.getOrderId());
+        Optional<Order> orderOptional = orderRepository.findById(new ValueObjectId(deleteOrderCommand.getOrderId()));
         if(orderOptional.isPresent()) {
             Order order = orderOptional.get();
             orderRepository.delete(orderOptional.get());

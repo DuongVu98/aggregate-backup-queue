@@ -1,6 +1,7 @@
 package com.epam.aggregatebackupqueue.aspect;
 
 import com.epam.aggregatebackupqueue.aggregate.Order;
+import com.epam.aggregatebackupqueue.aggregate.ValueObjectId;
 import com.epam.aggregatebackupqueue.annotations.TargetIdentifier;
 import com.epam.aggregatebackupqueue.repositories.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +55,7 @@ public class BackupAspect {
 
         if (targetField != null) {
             String value = (String) targetField.get(targetCommand);
-            Optional<Order> orderOptional = orderRepository.findById(value);
+            Optional<Order> orderOptional = orderRepository.findById(new ValueObjectId(value));
 
             if(orderOptional.isPresent()){
                 Order order = orderOptional.get();

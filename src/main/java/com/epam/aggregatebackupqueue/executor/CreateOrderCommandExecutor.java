@@ -1,6 +1,7 @@
 package com.epam.aggregatebackupqueue.executor;
 
 import com.epam.aggregatebackupqueue.aggregate.Order;
+import com.epam.aggregatebackupqueue.aggregate.ValueObjectId;
 import com.epam.aggregatebackupqueue.commands.CreateOrderCommand;
 import com.epam.aggregatebackupqueue.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,6 @@ public class CreateOrderCommandExecutor extends AbstractCommandExecutor<CreateOr
 
     @Override
     public Order execute(CreateOrderCommand createOrderCommand) {
-        return orderRepository.save(Order.builder().customerId("customer-1").build());
+        return orderRepository.save(Order.builder().id(new ValueObjectId(createOrderCommand.getOrderId())).customerId("customer-1").build());
     }
 }

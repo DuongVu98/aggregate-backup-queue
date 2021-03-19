@@ -1,7 +1,6 @@
 package com.epam.aggregatebackupqueue.aggregate;
 
 import lombok.*;
-import org.aspectj.weaver.ast.Or;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,12 +12,12 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "orders")
+@Table(name = "cart_orders")
 public class Order implements Comparable<Order>{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @EmbeddedId
+    @AttributeOverride(name = "value", column = @Column(name = "id"))
+    private ValueObjectId id;
 
     @Column(name = "customer")
     private String customerId;
@@ -26,11 +25,11 @@ public class Order implements Comparable<Order>{
     @Builder.Default
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<Item> items = new ArrayList<>();
 
     @Override
     public int compareTo(Order order) {
-        return this.id.compareTo(order.getId());
+        return this.id.getValue().compareTo(order.getId().getValue());
     }
 }

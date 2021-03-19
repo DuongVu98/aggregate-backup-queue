@@ -1,28 +1,25 @@
 package com.epam.aggregatebackupqueue.aggregate;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Getter
+@Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "items")
+@Table(name = "order_items")
 public class Item {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @EmbeddedId
+    @AttributeOverride(name = "value", column = @Column(name = "id"))
+    private ValueObjectId id;
 
     @Column(name = "name")
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "order", nullable = false)
+    @JoinColumn(name = "order_id")
     private Order order;
 }
