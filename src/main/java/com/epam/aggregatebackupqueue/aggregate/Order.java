@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "orders")
-public class Order{
+public class Order implements Comparable<Order>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,4 +28,9 @@ public class Order{
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<Item> items = new ArrayList<>();
+
+    @Override
+    public int compareTo(Order order) {
+        return this.id.compareTo(order.getId());
+    }
 }

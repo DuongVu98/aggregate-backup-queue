@@ -35,7 +35,10 @@ public class BackupAspect {
     public void aggregateBackupAnnotation() {
     }
 
-    @Before("aggregateBackupAnnotation()")
+    @Pointcut("within(com.epam.aggregatebackupqueue.controller.CommandGateway)")
+    public void commandGatewayPointcut(){}
+
+    @Before("aggregateBackupAnnotation() && commandGatewayPointcut()")
     public void doSomething(JoinPoint joinPoint) throws IllegalAccessException {
         Object[] args = joinPoint.getArgs();
         Object targetCommand = args[0];
